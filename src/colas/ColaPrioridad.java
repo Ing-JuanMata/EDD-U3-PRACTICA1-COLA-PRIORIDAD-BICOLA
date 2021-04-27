@@ -16,6 +16,7 @@ public class ColaPrioridad {
 
     public ColaPrioridad(int tam) {
         datos = new TDAPrioridad[tam];
+        ini = fin = -1;
     }
 
     public boolean insertar(char dato, int prioridad) {
@@ -23,13 +24,28 @@ public class ColaPrioridad {
             return false;
         }
 
-        datos[++fin] = new TDAPrioridad(prioridad, dato);
+        fin++;
+        datos[fin] = new TDAPrioridad(prioridad, dato);
         ini = ini == -1 ? 0 : ini;
         priorizar();
         return true;
     }
 
-    protected void priorizar() {
+    public boolean eliminar() {
+        if (colaVacia()) {
+            return false;
+        }
+
+        if (ini == fin) {
+            ini = fin = -1;
+        } else {
+            ini++;
+        }
+
+        return true;
+    }
+
+    private void priorizar() {
         if (ini == fin) {
             return;
         }
@@ -41,7 +57,9 @@ public class ColaPrioridad {
                 aux.setObjeto(datos[t1]);
                 datos[t1].setObjeto(datos[t2]);
                 datos[t2].setObjeto(aux);
-            }else{
+                t2--;
+                t1--;
+            } else {
                 break;
             }
         }
@@ -54,4 +72,17 @@ public class ColaPrioridad {
     protected boolean colaVacia() {
         return ini == -1;
     }
+
+    public int getIni() {
+        return ini;
+    }
+
+    public int getFin() {
+        return fin;
+    }
+
+    public TDAPrioridad getDato(int pos) {
+        return datos[pos];
+    }
+
 }
